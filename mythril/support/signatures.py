@@ -1,4 +1,4 @@
-"""The Mythril function signature database."""
+"""The Mythril function signature database."""#将函数签名映射回函数
 import functools
 import json
 import logging

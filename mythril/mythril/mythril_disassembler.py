@@ -30,13 +30,14 @@ class MythrilDisassembler:
         - Compiles solc code from file/onchain
         - Can also be used to access onchain storage data
     """
+    #反汇编器
 
     def __init__(
         self,
         eth: Optional[EthJsonRpc] = None,
         solc_version: str = None,
         solc_settings_json: str = None,
-        enable_online_lookup: bool = False,
+        enable_online_lookup: bool = False,#查找区块链上的合约
     ) -> None:
         self.solc_binary = self._init_solc_binary(solc_version)
         self.solc_settings_json = solc_settings_json
@@ -44,7 +45,7 @@ class MythrilDisassembler:
         self.enable_online_lookup = enable_online_lookup
         self.sigs = signatures.SignatureDB(enable_online_lookup=enable_online_lookup)
         self.contracts = []  # type: List[EVMContract]
-
+    #   初始化solc的版本
     @staticmethod
     def _init_solc_binary(version: str) -> str:
         """
@@ -54,9 +55,10 @@ class MythrilDisassembler:
         """
 
         if not version:
-            return os.environ.get("SOLC") or "solc"
+            return os.environ.get("SOLC") or "solc"#获取当前环境的solc版本
 
-        # tried converting input to semver, seemed not necessary so just slicing for now
+        # tried converting input to semver, seemed not necessary so just slicing for now 
+        # 尝试将输入转换为semver，似乎没有必要，所以现在只进行切片
         main_version = solc.get_solc_version_string()
 
         # In case instead of just the version number, --solv v0.x.x is used
@@ -68,7 +70,7 @@ class MythrilDisassembler:
         if main_version is None:
             raise CriticalError(
                 "Could not extract solc version from string {}".format(main_version)
-            )
+            )#没有版本号的异常
         if version == main_version_number:
             log.info("Given version matches installed version")
             solc_binary = os.environ.get("SOLC") or "solc"
@@ -102,6 +104,7 @@ class MythrilDisassembler:
         :param address: address of contract
         :return: tuple(address, Contract class)
         """
+        # 返回给定字节码的地址和契约类
         if address is None:
             address = util.get_indexed_address(0)
         if bin_runtime:
