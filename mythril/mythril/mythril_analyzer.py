@@ -57,6 +57,9 @@ class MythrilAnalyzer:
         :param requires_dynld: whether dynamic loading should be done or not
         :param onchain_storage_access: Whether onchain access should be done or not
         """
+        #反汇编类
+        #是否需要动态加载
+        #是否需要访问链上合约
         self.eth = disassembler.eth
         self.contracts = disassembler.contracts or []  # type: List[EVMContract]
         self.enable_online_lookup = disassembler.enable_online_lookup
@@ -83,6 +86,8 @@ class MythrilAnalyzer:
         :param contract: The Contract on which the analysis should be done
         :return: The serialized state space
         """
+        #返回合约的可序列化状态空间
+        
         sym = SymExecWrapper(
             contract or self.contracts[0],
             self.address,
@@ -113,7 +118,8 @@ class MythrilAnalyzer:
         :param transaction_count: The amount of transactions to be executed
         :return: The generated graph in html format
         """
-
+        #图的物理模拟
+        #返回html格式的生成图
         sym = SymExecWrapper(
             contract or self.contracts[0],
             self.address,
