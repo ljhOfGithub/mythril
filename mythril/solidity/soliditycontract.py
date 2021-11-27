@@ -141,9 +141,11 @@ class SolidityContract(EVMContract):
         """
         Get source indices mapping
         """
+        #获取源索引映射
         if "generatedSources" not in source_data:
             return
         sources = source_data["generatedSources"]
+        #对于某些实用程序例程，编译器生成“内部”源文件，这些文件不是原始输入的一部分，而是从源映射引用的。这些源文件及其标识符可以通过 output['contracts'][sourceName][contractName]['evm']['bytecode']['generatedSources'] .
         for source in sources:
             full_contract_src_maps = SolidityContract.get_full_contract_src_maps(
                 source["ast"]
@@ -160,13 +162,13 @@ class SolidityContract(EVMContract):
         indices: Dict = {}
         for contract_data in data["contracts"].values():#以列表返回字典中的所有值
             for source_data in contract_data.values():
-                SolidityContract.get_sources(indices, source_data["evm"]["bytecode"])
+                SolidityContract.get_sources(indices, source_data["evm"]["bytecode"])#十六进制字符串的字节码
                 SolidityContract.get_sources(
-                    indices, source_data["evm"]["deployedBytecode"]
+                    indices, source_data["evm"]["deployedBytecode"]#函数哈希的列表
                 )
         for source in data["sources"].values():
             full_contract_src_maps = SolidityContract.get_full_contract_src_maps(
-                source["ast"]
+                source["ast"]#获取某个合约的源映射
             )
             with open(source["ast"]["absolutePath"]) as f:
                 code = f.read()
