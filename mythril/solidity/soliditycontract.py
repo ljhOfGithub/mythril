@@ -25,7 +25,7 @@ class SourceMapping:
 class SolidityFile:
     """Representation of a file containing Solidity code."""
 
-    def __init__(self, filename: str, data: str, full_contract_src_maps: Set[str]):
+    def __init__(self, filename: str, data: str, full_contract_src_maps: Set[str]):#Set[str]：表示字符串的集合
         """
         Metadata class containing data regarding a specific solidity file
         :param filename: The filename of the solidity file
@@ -35,7 +35,8 @@ class SolidityFile:
         self.filename = filename
         self.data = data
         self.full_contract_src_maps = full_contract_src_maps
-
+#元数据类，包含关于特定solidity文件的数据
+#文件中所有合约的合约源映射集
 
 class SourceCodeInfo:
     def __init__(self, filename, lineno, code, mapping):
@@ -57,9 +58,9 @@ def get_contracts_from_file(input_file, solc_settings_json=None, solc_binary="so
     data = get_solc_json(
         input_file, solc_settings_json=solc_settings_json, solc_binary=solc_binary
     )
-
+    #获取文件中的合约
     try:
-        contract_names = data["contracts"][input_file].keys()
+        contract_names = data["contracts"][input_file].keys()#返回一个字典所有的键即合约名
     except KeyError:
         raise NoContractFoundError
 
@@ -79,7 +80,7 @@ def get_contracts_from_file(input_file, solc_settings_json=None, solc_binary="so
 
 class SolidityContract(EVMContract):
     """Representation of a Solidity contract."""
-
+    #表示solidity合约
     def __init__(
         self, input_file, name=None, solc_settings_json=None, solc_binary="solc"
     ):
@@ -93,6 +94,7 @@ class SolidityContract(EVMContract):
         has_contract = False
 
         # If a contract name has been specified, find the bytecode of that specific contract
+        #如果指定了合同名称，查找该合同的字节码
         srcmap_constructor = []
         srcmap = []
         if name:
@@ -105,6 +107,7 @@ class SolidityContract(EVMContract):
                 has_contract = True
 
         # If no contract name is specified, get the last bytecode entry for the input file
+        # 如果没有指定契约名称，则获取输入文件的最后一个字节码条目
 
         else:
             for contract_name, contract in sorted(
@@ -154,7 +157,7 @@ class SolidityContract(EVMContract):
         Returns solc file indices
         """
         indices: Dict = {}
-        for contract_data in data["contracts"].values():
+        for contract_data in data["contracts"].values():#以列表返回字典中的所有值
             for source_data in contract_data.values():
                 SolidityContract.get_sources(indices, source_data["evm"]["bytecode"])
                 SolidityContract.get_sources(
@@ -175,7 +178,7 @@ class SolidityContract(EVMContract):
     def get_full_contract_src_maps(ast: Dict) -> Set[str]:
         """
         Takes a solc AST and gets the src mappings for all the contracts defined in the top level of the ast
-        :param ast: AST of the contract
+        :param ast: AST of the contract 合约的抽象语法树
         :return: The source maps
         """
         source_maps = set()

@@ -46,9 +46,9 @@ def get_solc_json(file, solc_binary="solc", solc_settings_json=None):
     :param solc_settings_json:
     :return:
     """
-    cmd = [solc_binary, "--standard-json", "--allow-paths", "."]
-    settings = {}
-    if solc_settings_json:
+    cmd = [solc_binary, "--standard-json", "--allow-paths", "."]#命令行的命令，使用子进程运行，默认编译器是官方的,--allow-paths允许用于import语句的路径
+    settings = {}#如果 solc 用选项调用 --standard-json ，它将期望在标准输入上有一个JSON输入（如下所述），并在标准输出上返回一个JSON输出。
+    if solc_settings_json:#编译的默认设置
         with open(solc_settings_json) as f:
             settings = json.load(f)
     settings.update(
@@ -74,21 +74,22 @@ def get_solc_json(file, solc_binary="solc", solc_settings_json=None):
             "sources": {file: {"urls": [file]}},
             "settings": settings,
         }
-    )
+    )#用于将 Python 对象编码成 JSON 字符串
 
     try:
-        p = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        p = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE)#开子进程编译solidity文件为json
         stdout, stderr = p.communicate(bytes(input_json, "utf8"))
-
+#Popen.communicate(input=None)：与子进程进行交互。向stdin发送数据，或从stdout和stderr中读取数据。可选参数input指定发送到子进程的参数。
+#Communicate()返回一个元组：(stdoutdata, stderrdata)。注意：如果希望通过进程的stdin向其发送数据，在创建Popen对象的时候，参数stdin必须被设置为PIPE。同样，如果希望从stdout和stderr获取数据，必须将stdout和stderr设置为PIPE
     except FileNotFoundError:
         raise CompilerError(
             "Compiler not found. Make sure that solc is installed and in PATH, or set the SOLC environment variable."
         )
 
-    out = stdout.decode("UTF-8")
+    out = stdout.decode("UTF-8")#bytes解码
 
     try:
-        result = json.loads(out)
+        result = json.loads(out)#用于解码 JSON 数据。该函数返回 Python 字段的数据类型
     except JSONDecodeError as e:
         log.error(f"Encountered a decode error, stdout:{out}, stderr: {stderr}")
         raise e
