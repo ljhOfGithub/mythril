@@ -68,7 +68,7 @@ def get_contracts_from_file(input_file, solc_settings_json=None, solc_binary="so
         if len(
             data["contracts"][input_file][contract_name]["evm"]["deployedBytecode"][
                 "object"
-            ]
+            ]#["evm"]["deployedBytecode"] The list of function hashes
         ):
             yield SolidityContract(
                 input_file=input_file,
@@ -95,6 +95,7 @@ class SolidityContract(EVMContract):
 
         # If a contract name has been specified, find the bytecode of that specific contract
         #如果指定了合同名称，查找该合同的字节码
+        #获取json对象中的各个参数
         srcmap_constructor = []
         srcmap = []
         if name:
@@ -185,7 +186,7 @@ class SolidityContract(EVMContract):
         if ast["nodeType"] == "SourceUnit":
             for child in ast["nodes"]:
                 if child.get("contractKind"):
-                    source_maps.add(child["src"])
+                    source_maps.add(child["src"])#src是代码位置，从具体的https://gist.github.com/afterburncallum/8eb6067794ba98513545080f61e7f1b6可以看出
         elif ast["nodeType"] == "YulBlock":
             for child in ast["statements"]:
                 source_maps.add(child["src"])
