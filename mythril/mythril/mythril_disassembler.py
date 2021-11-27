@@ -131,6 +131,7 @@ class MythrilDisassembler:
         :param address: The on chain address of a contract
         :return: tuple(address, contract)
         """
+        #返回在链上指定地址的合约
         if not re.match(r"0x[a-fA-F0-9]{40}", address):
             raise CriticalError("Invalid contract address. Expected format is '0x...'.")
 
@@ -146,7 +147,7 @@ class MythrilDisassembler:
         except ConnectionError:
             raise CriticalError(
                 "Could not connect to RPC server. Make sure that your node is running and that RPC parameters are set correctly."
-            )
+            )#连接服务异常
         except Exception as e:
             raise CriticalError("IPC / RPC error: " + str(e))
 
@@ -243,6 +244,7 @@ class MythrilDisassembler:
         :param func: function name
         :return: Its hash signature
         """
+        # 返回函数名的哈希签名
         print(sha3(func))
         return "0x%s" % sha3(func)[:4].hex()
 
@@ -294,7 +296,8 @@ class MythrilDisassembler:
             raise CriticalError(
                 "Invalid storage index. Please provide a numeric value."
             )
-
+        # ValueError：Raised when an operation or function receives an argument that has the right type 
+        # but an inappropriate value, and the situation is not described by a more precise exception such as IndexError.
         outtxt = []
 
         try:
@@ -322,7 +325,7 @@ class MythrilDisassembler:
                             )
                         )
         except FileNotFoundError as e:
-            raise CriticalError("IPC error: " + str(e))
+            raise CriticalError("IPC error: " + str(e))#CriticalError最高级别的错误
         except ConnectionError:
             raise CriticalError(
                 "Could not connect to RPC server. "
