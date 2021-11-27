@@ -15,7 +15,9 @@ class Disassembly(object):
     - function name to entry point mapping
     - function entry point to function name mapping
     """
-
+#存储字节码及其反汇编
+#此外，它将收集以下关于反汇编代码中现有函数的信息:
+#函数入口点到函数名的映射
     def __init__(self, code: str, enable_online_lookup: bool = False) -> None:
         """
 
@@ -34,10 +36,11 @@ class Disassembly(object):
     def assign_bytecode(self, bytecode):
         self.bytecode = bytecode
         # open from default locations
-        # control if you want to have online signature hash lookups
+        # control if you want to have online signature hash lookups控制是否要进行在线签名散列查找
         signatures = SignatureDB(enable_online_lookup=self.enable_online_lookup)
         self.instruction_list = asm.disassemble(util.safe_decode(bytecode))
         # Need to take from PUSH1 to PUSH4 because solc seems to remove excess 0s at the beginning for optimizing
+        #需要从PUSH1到PUSH4，因为solc似乎删除多余的0在优化的开始
         jump_table_indices = asm.find_op_code_sequence(
             [("PUSH1", "PUSH2", "PUSH3", "PUSH4"), ("EQ",)], self.instruction_list
         )
@@ -80,7 +83,9 @@ def get_function_info(
     :param signature_database: Database used to map function hashes to their respective function names
     :return: function hash, function entry point, function name
     """
-
+    #生成的代码将执行指向正确的函数，如下所示
+    #这个函数接受指向第一个指令的索引，并从中找出函数哈希值、函数入口和函数名。
+    #函数入口代码负责分配函数所需的任何堆栈空间
     # Append with missing 0s at the beginning
     function_hash = "0x" + instruction_list[index]["argument"][2:].rjust(8, "0")
     function_names = signature_database.get(function_hash)

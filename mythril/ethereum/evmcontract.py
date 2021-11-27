@@ -1,5 +1,6 @@
 """This module contains the class representing EVM contracts, aka Smart
 Contracts."""
+#该模块包含表示EVM契约的类，即智能契约。
 import re
 import logging
 import persistent
@@ -29,7 +30,7 @@ class EVMContract(persistent.Persistent):
         :param name:
         :param enable_online_lookup:
         """
-        creation_code = re.sub(r"(_{2}.{38})", "aa" * 20, creation_code)
+        creation_code = re.sub(r"(_{2}.{38})", "aa" * 20, creation_code)# 用于替换字符串中的匹配项
         code = re.sub(r"(_{2}.{38})", "aa" * 20, code)
         self.creation_code = creation_code
         self.name = name

@@ -59,12 +59,12 @@ class MythrilDisassembler:
 
         # tried converting input to semver, seemed not necessary so just slicing for now 
         # 尝试将输入转换为semver，似乎没有必要，所以现在只进行切片
-        main_version = solc.get_solc_version_string()
+        main_version = solc.get_solc_version_string()#solc版本
 
         # In case instead of just the version number, --solv v0.x.x is used
 
         if version.startswith("v"):
-            version = version[1:]
+            version = version[1:]#去掉版本号的v字符
 
         main_version_number = re.match(r"\d+.\d+.\d+", main_version)
         if main_version is None:

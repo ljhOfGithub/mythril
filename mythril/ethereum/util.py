@@ -31,6 +31,9 @@ def safe_decode(hex_encoded_string):
     """
     if hex_encoded_string.startswith("0x"):
         return bytes.fromhex(hex_encoded_string[2:])
+        #>>> bytes.fromhex('000102030405')
+        #b'\x00\x01\x02\x03\x04\x05'
+        #把十六进制转换为字节
     else:
         return bytes.fromhex(hex_encoded_string)
 
@@ -106,7 +109,10 @@ def get_random_address():
     """
     return binascii.b2a_hex(os.urandom(20)).decode("UTF-8")
 
-
+#binascii.b2a_hex(data[, sep[, bytes_per_sep=1]])
+#binascii.hexlify(data[, sep[, bytes_per_sep=1]])
+#返回二进制数据 data 的十六进制表示形式。 data 的每个字节都被转换为相应的2位十六进制表示形式。因此返回的字节对象的长度是 data 的两倍。
+#os.urandom函数用来获取一个指定长度的随机bytes对象，python的这个函数实际上是在读取OS操作系统提供的随机源
 def get_indexed_address(index):
     """
 
@@ -123,8 +129,8 @@ def solc_exists(version):
     :return:
     """
 
-    default_binary = "/usr/bin/solc"
-    if sys.version_info[1] >= 6:
+    default_binary = "/usr/bin/solc"#返回solc所在路径
+    if sys.version_info[1] >= 6:#判断python版本是否大于等于3.6
         if platform.system() == "Darwin":
             solcx.import_installed_solc()
         solcx.install_solc("v" + version)
