@@ -182,6 +182,7 @@ class SolidityContract(EVMContract):
         :param ast: AST of the contract 合约的抽象语法树
         :return: The source maps
         """
+        #添加ast中所有的需要记录的代码位置到集合中
         source_maps = set()
         if ast["nodeType"] == "SourceUnit":
             for child in ast["nodes"]:
@@ -206,7 +207,7 @@ class SolidityContract(EVMContract):
         file_index = mappings[index].solidity_file_idx
 
         if file_index == -1:
-            # If issue is detected in an internal file
+            # If issue is detected in an internal file如果在内部文件中检测到问题
             return None
 
         solidity_file = self.solc_indices[file_index]
