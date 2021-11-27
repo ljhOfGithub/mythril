@@ -28,8 +28,8 @@ class Disassembly(object):
         self.instruction_list = asm.disassemble(util.safe_decode(code))
 
         self.func_hashes = []  # type: List[str]
-        self.function_name_to_address = {}  # type: Dict[str, int]
-        self.address_to_function_name = {}  # type: Dict[int, str]
+        self.function_name_to_address = {}  # type: Dict[str, int] 函数名到地址的字典映射
+        self.address_to_function_name = {}  # type: Dict[int, str] 地址到函数名的字典映射
         self.enable_online_lookup = enable_online_lookup
         self.assign_bytecode(bytecode=code)
 

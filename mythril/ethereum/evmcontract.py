@@ -35,7 +35,7 @@ class EVMContract(persistent.Persistent):
         self.creation_code = creation_code
         self.name = name
         self.code = code
-        self.disassembly = Disassembly(code, enable_online_lookup=enable_online_lookup)
+        self.disassembly = Disassembly(code, enable_online_lookup=enable_online_lookup)#
 
         self.creation_disassembly = Disassembly(
             creation_code, enable_online_lookup=enable_online_lookup
@@ -48,7 +48,11 @@ class EVMContract(persistent.Persistent):
         :return: runtime bytecode hash
         """
         return get_code_hash(self.code)
-
+#不定义setter方法就是一个只读属性
+#>>> s = Student()
+#>>> s.score = 60 # OK，实际转化为s.set_score(60)
+#>>> s.score # OK，实际转化为s.get_score()
+#60
     @property
     def creation_bytecode_hash(self):
         """
